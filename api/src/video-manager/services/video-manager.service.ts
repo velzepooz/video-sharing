@@ -25,7 +25,7 @@ export class VideoManagerService {
     });
   }
 
-  async deleteFile(id: string): Promise<void> {
+  async deleteVideo(id: string): Promise<void> {
     const videoFile = await this._videoRepository.findById(id);
 
     if (!videoFile) throw new MessageCodeError('video:notFound');
@@ -47,5 +47,9 @@ export class VideoManagerService {
       type: fileInfo.ContentType,
       stream: fileStream,
     };
+  }
+
+  async getAllVideos(): Promise<VideoInterface[]> {
+    return this._videoRepository.getAllVideos();
   }
 }

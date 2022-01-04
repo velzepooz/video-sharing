@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import * as stream from 'stream';
 import { S3 } from 'aws-sdk';
 import { InjectS3 } from 'nestjs-s3';
 import { HeadObjectOutput } from 'aws-sdk/clients/s3';
@@ -35,7 +34,7 @@ export class S3BucketService {
       return await this.s3.deleteObjects({
         Bucket: configService.getCustomKey('AWS_PUBLIC_BUCKET_NAME'),
         Delete: {
-          Objects: [{ Key: `${configService.getCustomKey('S3_FOLDER_NAME')}/${fileName}` }],
+          Objects: [{ Key: fileName }],
         },
       }).promise();
     } catch (e) {

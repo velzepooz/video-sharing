@@ -20,6 +20,10 @@ export class VideoRepository implements VideoRepositoryInterface {
   }
 
   async deleteById(id: string): Promise<void> {
-    this.videoModel.deleteOne({ _id: id });
+    await this.videoModel.deleteOne({ _id: id });
+  }
+
+  async getAllVideos(): Promise<VideoInterface[]> {
+    return this.videoModel.find();
   }
 }

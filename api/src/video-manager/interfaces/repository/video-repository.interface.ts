@@ -4,4 +4,5 @@ export interface VideoRepositoryInterface {
   create(video: VideoInterface): Promise<VideoInterface>;
   deleteById(id: string): Promise<void>;
   findById(id: string): Promise<VideoInterface>;
+  getAllVideos(): Promise<VideoInterface[]>;
 }

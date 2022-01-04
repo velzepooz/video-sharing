@@ -30,8 +30,8 @@ export class VideoManagerController {
 
   @UsePipes(new ValidationPipe())
   @Delete(ROUTES.VIDEO.ID)
-  async deleteFile(@Param() id: string): Promise<void> {
-    return this._videoManagerService.deleteFile(id);
+  async deleteVideo(@Param() { id }: IdParamDto): Promise<void> {
+    return this._videoManagerService.deleteVideo(id);
   }
 
   @UsePipes(new ValidationPipe())
@@ -47,5 +47,10 @@ export class VideoManagerController {
     res.setHeader('Accept-Ranges', 'bytes');
 
     videoStream.stream.pipe(res);
+  }
+
+  @Get()
+  async getAllVideos() {
+    return this._videoManagerService.getAllVideos();
   }
 }
