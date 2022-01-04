@@ -10,6 +10,7 @@ import { FileInterface } from '../../shared/interfaces/file.interface';
 import { VideoDto } from '../dto/out/video.dto';
 import { IdParamDto } from '../dto/in/id-param.dto';
 import { ResponseInterface } from '../../shared/interfaces/response.interface';
+import { HeadersInterface } from '../../shared/interfaces/headers.interface';
 
 @Controller(ROUTES.VIDEO.MAIN)
 export class VideoManagerController {
@@ -39,14 +40,15 @@ export class VideoManagerController {
   @Get(ROUTES.VIDEO.ID)
   async getVideo(
     @Param() { id }: IdParamDto,
-    @Headers() headers,
+    @Headers() headers: HeadersInterface,
     @Res() res: ResponseInterface,
   ) {
-    const videoStream = await this._videoManagerService.getVideoStream(id);
+    const video = await this._videoManagerService.getVideoStream(id, headers);
 
     res.setHeader('Accept-Ranges', 'bytes');
+    res.setHeader('Content-Type', `video/${video.type}`);
 
-    videoStream.stream.pipe(res);
+    video.stream.pipe(res);
   }
 
   @Get()

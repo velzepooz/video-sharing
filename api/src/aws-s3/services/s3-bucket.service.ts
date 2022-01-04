@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { S3 } from 'aws-sdk';
 import { InjectS3 } from 'nestjs-s3';
 import { HeadObjectOutput } from 'aws-sdk/clients/s3';
+import * as stream from 'stream';
 import { configService } from '../../shared/config/config.service';
 import { MessageCodeError } from '../../shared/errors/message-code-error';
 
@@ -53,11 +54,12 @@ export class S3BucketService {
     }
   }
 
-  async getFileStream(fileName: string): Promise<any> {
+  async getFileStream(fileName: string, range: string): Promise<stream.Readable> {
     try {
-      return await this.s3.getObject({
+      return this.s3.getObject({
         Bucket: configService.getCustomKey('AWS_PUBLIC_BUCKET_NAME'),
         Key: fileName,
+        Range: range,
       }).createReadStream();
     } catch (e) {
       throw new MessageCodeError('s3:stream', e);

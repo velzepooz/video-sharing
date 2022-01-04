@@ -3,6 +3,8 @@ import { S3BucketService } from '../../aws-s3/services/s3-bucket.service';
 import { VideoRepository } from '../repository/video.repository';
 import { VideoInterface } from '../interfaces/schema/video.interface';
 import { MessageCodeError } from '../../shared/errors/message-code-error';
+import { GetVideoStreamInterface } from '../interfaces/responses/video-manager-service.interfaces';
+import { HeadersInterface } from '../../shared/interfaces/headers.interface';
 
 @Injectable()
 export class VideoManagerService {
@@ -35,13 +37,13 @@ export class VideoManagerService {
     await this._videoRepository.deleteById(id);
   }
 
-  async getVideoStream(id: string): Promise<any> {
+  async getVideoStream(id: string, headers: HeadersInterface): Promise<GetVideoStreamInterface> {
     const videoFile = await this._videoRepository.findById(id);
 
     if (!videoFile) throw new MessageCodeError('video:notFound');
 
     const fileInfo = await this._s3BucketService.getFileInfo(videoFile.name);
-    const fileStream = await this._s3BucketService.getFileStream(videoFile.name);
+    const fileStream = await this._s3BucketService.getFileStream(videoFile.name, headers.range);
 
     return {
       size: fileInfo.ContentLength,
