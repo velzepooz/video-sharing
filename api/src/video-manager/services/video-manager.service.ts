@@ -22,6 +22,7 @@ export class VideoManagerService {
     return this._videoRepository.create({
       videoUrl: result.url,
       name: result.fileName,
+      fileType: originalName[originalName.length - 1],
     });
   }
 
@@ -44,7 +45,7 @@ export class VideoManagerService {
 
     return {
       size: fileInfo.ContentLength,
-      type: fileInfo.ContentType,
+      type: videoFile.fileType,
       stream: fileStream,
     };
   }
